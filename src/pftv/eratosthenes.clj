@@ -7,7 +7,7 @@
 ; 4. Find the first number greater than p in the list that is not marked. If there was no such number, stop. Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
 ; 5. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
 
-(defn not-divisable-by [n d]
+(defn not-divisible-by [n d]
   (when-not (integer? (/ n d))
     n))
 
@@ -16,15 +16,29 @@
          candidates (range 3 (inc n))]
     (let [highest-found-prime (last found-primes)
           remaining (->> candidates
-                         (map #(not-divisable-by % highest-found-prime))
+                         (map #(not-divisible-by % highest-found-prime))
                          (remove nil?))]
       (if (= remaining candidates)
         (concat found-primes candidates)
         (recur (conj found-primes (first remaining)) (rest remaining))))))
 
 (comment
-  (sieve 500)
-  (not-divisable-by 3 3)
-  (not-divisable-by 4 3))
+  (sieve 1000))
 
 ; As a refinement, it is sufficient to mark the numbers in step 3 starting from p2, as all the smaller multiples of p will have already been marked at that point. This means that the algorithm is allowed to terminate in step 4 when p2 is greater than n
+
+(defn sieve-refined [n]
+  (let [sqrt-n (Math/sqrt n)]
+    (loop [found-primes [2]
+           candidates (range 3 (inc n))]
+      (let [highest-found-prime (last found-primes)]
+        (if (> highest-found-prime sqrt-n)
+          (concat found-primes candidates)
+          (let [remaining
+                (->> candidates
+                  (map #(not-divisible-by % highest-found-prime))
+                  (remove nil?))]
+            (recur (conj found-primes (first remaining)) (rest remaining))))))))
+
+(comment
+  (sieve-refined 1000))
