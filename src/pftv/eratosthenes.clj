@@ -1,5 +1,7 @@
 (ns eratosthenes)
 
+(use 'criterium.core)
+
 ; From https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 ; 1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
 ; 2. Initially, let p equal 2, the smallest prime number.
@@ -23,13 +25,13 @@
           remaining (->> candidates
                          (map #(not-divisible-by % highest-found-prime))
                          (remove nil?))]
-      (println candidates)
       (if (= remaining candidates)
         (concat found-primes candidates)
         (recur (conj found-primes (first remaining)) (rest remaining))))))
 
 (comment
-  (sieve 70))
+  (sieve 70)
+  (with-progress-reporting (quick-bench (sieve 10000) :verbose)))
 
 ; As a refinement, it is sufficient to mark the numbers in step 3 starting from p2, as all the smaller multiples of p will have already been marked at that point. This means that the algorithm is allowed to terminate in step 4 when p2 is greater than n
 
@@ -38,7 +40,6 @@
     (loop [found-primes [2]
            candidates (range 3 (inc n))]
       (let [highest-found-prime (last found-primes)]
-        (println highest-found-prime found-primes candidates)
         (if (> highest-found-prime sqrt-n)
           (concat found-primes candidates)
           (let [remaining
@@ -48,4 +49,25 @@
             (recur (conj found-primes (first remaining)) (rest remaining))))))))
 
 (comment
-  (sieve-refined 70))
+  (sieve-refined 1000000)
+  (with-progress-reporting (quick-bench (sieve-refined 10000) :verbose)))
+
+;; Clojure lazy-seq function to generate n prime numbers. 
+;; It generates .5 million prime numbers in 20 secs using
+;; the naive non-sieve algo
+;; Author: Abhishek Gupta (@abhilater)
+
+(defn n-primes
+  [n]
+  (filter (fn [num]
+            (loop [end (int (Math/sqrt num)), div 2, re (rem num div)]
+              (cond
+                (< num 2) false
+                (= num 2) true
+                (= re 0) false
+                (> div end) true
+                :else (recur end (inc div) (rem num div))))) (range (inc n))))
+
+(comment
+  (n-primes 1000000)
+  (with-progress-reporting (quick-bench (n-primes 10000) :verbose)))
