@@ -15,8 +15,13 @@
 ;    list are all the primes below n.
 
 (defn not-divisible-by [n d]
-  (when-not (integer? (/ n d))
+  (when-not (= 0 (rem n d))
     n))
+
+(comment
+  (not-divisible-by 3 3)
+  (not-divisible-by 4 3)
+  (rem 4 3))
 
 (defn sieve [n]
   (loop [found-primes [2]
@@ -49,7 +54,7 @@
             (recur (conj found-primes (first remaining)) (rest remaining))))))))
 
 (comment
-  (sieve-refined 1000000)
+  (time (str "mine: " (count (sieve-refined 10000)) " primes"))
   (with-progress-reporting (quick-bench (sieve-refined 10000) :verbose)))
 
 ;; Clojure lazy-seq function to generate n prime numbers. 
@@ -57,7 +62,7 @@
 ;; the naive non-sieve algo
 ;; Author: Abhishek Gupta (@abhilater)
 
-(defn n-primes
+(defn primes-to-n
   [n]
   (filter (fn [num]
             (loop [end (int (Math/sqrt num)), div 2, re (rem num div)]
@@ -69,5 +74,5 @@
                 :else (recur end (inc div) (rem num div))))) (range (inc n))))
 
 (comment
-  (n-primes 1000000)
-  (with-progress-reporting (quick-bench (n-primes 10000) :verbose)))
+  (time (str "@abhilater's: " (count (primes-to-n 10000)) " primes"))
+  (with-progress-reporting (quick-bench (primes-to-n 10000) :verbose)))
