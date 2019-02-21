@@ -1,7 +1,5 @@
 (ns eratosthenes)
 
-(use 'criterium.core)
-
 ; From https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 ; 1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
 ; 2. Initially, let p equal 2, the smallest prime number.
@@ -14,6 +12,8 @@
 ; 5. When the algorithm terminates, the numbers remaining not marked in the
 ;    list are all the primes below n.
 
+(use 'criterium.core)
+
 (defn not-divisible-by [n d]
   (when-not (= 0 (rem n d))
     n))
@@ -24,38 +24,64 @@
   (rem 4 3))
 
 (defn sieve [n]
-  (loop [found-primes [2]
-         candidates (range 3 (inc n))]
+  (loop [found-primes [2 3]
+         candidates (range 5 (inc n) 2)]
     (let [highest-found-prime (last found-primes)
           remaining (->> candidates
                          (map #(not-divisible-by % highest-found-prime))
                          (remove nil?))]
       (if (= remaining candidates)
         (concat found-primes candidates)
-        (recur (conj found-primes (first remaining)) (rest remaining))))))
+        (recur (concat found-primes (take 1 remaining)) (drop 1 remaining))))))
 
 (comment
-  (sieve 70)
-  (with-progress-reporting (quick-bench (sieve 10000) :verbose)))
+  (sieve 30)
+  (time (str "mine: " (count (sieve 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (sieve 1000) :verbose)))
 
 ; As a refinement, it is sufficient to mark the numbers in step 3 starting from p2, as all the smaller multiples of p will have already been marked at that point. This means that the algorithm is allowed to terminate in step 4 when p2 is greater than n
 
 (defn sieve-refined [n]
   (let [sqrt-n (Math/sqrt n)]
-    (loop [found-primes [2]
-           candidates (range 3 (inc n))]
-      (let [highest-found-prime (last found-primes)]
-        (if (> highest-found-prime sqrt-n)
-          (concat found-primes candidates)
-          (let [remaining
-                (->> candidates
-                     (map #(not-divisible-by % highest-found-prime))
-                     (remove nil?))]
-            (recur (conj found-primes (first remaining)) (rest remaining))))))))
+    (loop [found-primes (range 2 4)
+           candidates (range 5 (inc n) 2)
+           highest-found-prime 3]
+      (if (> highest-found-prime sqrt-n)
+        (concat found-primes candidates)
+        (let [remaining (->> candidates
+                             (map #(not-divisible-by % highest-found-prime))
+                             (remove nil?))
+              highest (take 1 remaining)]
+          (recur (concat found-primes highest) (drop 1 remaining) (first highest)))))))
 
 (comment
-  (time (str "mine: " (count (sieve-refined 10000)) " primes"))
+  (sieve-refined 30)
+  (time (str "mine: " (count (sieve-refined 1000000)) " primes"))
   (with-progress-reporting (quick-bench (sieve-refined 10000) :verbose)))
+
+(defn sieve-refined-2 [n]
+  (let [sqrt-n (Math/sqrt n)]
+    (loop [iteration 1
+           known-primes (range 2 4)
+           candidates (range 5 (inc n) 2)]
+      (let [next-eliminator (nth known-primes iteration)]
+        (if (> next-eliminator sqrt-n)
+          (concat known-primes candidates)
+          (let [squared-idx (.indexOf candidates (* next-eliminator next-eliminator))
+                found-primes (take squared-idx candidates)
+                remaining (->> (drop (inc squared-idx) candidates)
+                               (map #(not-divisible-by % next-eliminator))
+                               (remove nil?))
+                primes (concat known-primes found-primes)]
+            (recur
+             (inc iteration)
+             primes
+             remaining)))))))
+
+(comment
+  (sieve-refined-2 50)
+  (time (str "mine: " (count (sieve-refined-2 10000)) " primes"))
+  (with-progress-reporting (quick-bench (sieve-refined-2 1000) :verbose)))
 
 ;; Clojure lazy-seq function to generate n prime numbers. 
 ;; It generates .5 million prime numbers in 20 secs using
@@ -74,5 +100,5 @@
                 :else (recur end (inc div) (rem num div))))) (range (inc n))))
 
 (comment
-  (time (str "@abhilater's: " (count (primes-to-n 10000)) " primes"))
-  (with-progress-reporting (quick-bench (primes-to-n 10000) :verbose)))
+  (time (str "@abhilater's: " (count (primes-to-n 100000)) " primes"))
+  (with-progress-reporting (quick-bench (count (primes-to-n 10000)) :verbose)))
