@@ -23,7 +23,7 @@
   (not-divisible-by 4 3)
   (rem 4 3))
 
-(defn sieve [n]
+(defn sieve-first [n]
   (cond
     (< n 2) ()
     :else (loop [found-primes [2]
@@ -37,33 +37,31 @@
                 (recur (concat found-primes (take 1 remaining)) (drop 1 remaining)))))))
 
 (comment
-  (sieve 30)
-  (time (str "mine: " (count (sieve 1000000)) " primes"))
-  (with-progress-reporting (bench (sieve 100000) :verbose)))
+  (sieve-first 30)
+  (time (str "mine: " (count (sieve-first 100000)) " primes"))
+  (with-progress-reporting (bench (sieve-first 100000) :verbose)))
 
 ; Refinement: The algorithm is allowed to terminate in step 4 when p2
 ; is greater than n
 
-(defn sieve-refined [n]
+(defn sieve [n]
   (cond
     (< n 2) ()
     (< n 3) (range 2 3)
     :else (let [sqrt-n (Math/sqrt n)]
-            (loop [found-primes (range 2 4)
+            (loop [known (range 2 4)
                    candidates (range 5 (inc n) 2)
-                   highest-found-prime 3]
-              (if (> highest-found-prime sqrt-n)
-                (concat found-primes candidates)
-                (let [remaining (->> candidates
-                                     (map #(not-divisible-by % highest-found-prime))
-                                     (remove nil?))
-                      highest (take 1 remaining)]
-                  (recur (concat found-primes highest) (drop 1 remaining) (first highest))))))))
+                   p 3]
+              (if-not (< p sqrt-n)
+                (concat known candidates)
+                (let [remaining (remove #(= 0 (rem % p)) candidates)
+                      next-p (take 1 remaining)]
+                  (recur (concat known next-p) (drop 1 remaining) (first next-p))))))))
 
 (comment
-  (sieve-refined 30)
-  (time (str "mine: " (count (sieve-refined 1000000)) " primes"))
-  (with-progress-reporting (bench (sieve-refined 1000000) :verbose)))
+  (sieve 30)
+  (time (str "mine: " (count (sieve 100000)) " primes"))
+  (with-progress-reporting (quick-bench (sieve 100000) :verbose)))
 
 
 ; As a refinement, it is sufficient to mark the numbers in step 3 starting
@@ -94,7 +92,7 @@
 
 (comment
   (sieve-refined-2 50)
-  (time (str "mine: " (count (sieve-refined-2 1000000)) " primes"))
+  (time (str "mine: " (count (sieve-refined-2 100000)) " primes"))
   (with-progress-reporting (bench (sieve-refined-2 100000) :verbose)))
 
 ;; Clojure lazy-seq function to generate n prime numbers. 
@@ -116,5 +114,5 @@
 (comment
   (primes-to-n 70)
   (time (str "@abhilater's: " (count (primes-to-n 1000000)) " primes"))
-  (with-progress-reporting (bench (count (primes-to-n 100000)) :verbose)))
+  (with-progress-reporting (quick-bench (count (primes-to-n 100000)) :verbose)))
 
