@@ -41,18 +41,20 @@
   (time (str "mine: " (count (sieve-first 100000)) " primes"))
   (with-progress-reporting (bench (sieve-first 100000) :verbose)))
 
-; Refinement: The algorithm is allowed to terminate in step 4 when p2
+; Refinement: it is sufficient to mark the numbers in step 3 starting
+; from p2, as all the smaller multiples of p will have already been marked
+; at that point. The algorithm is allowed to terminate in step 4 when p2
 ; is greater than n
 
 (defn sieve [n]
   (cond
     (< n 2) ()
     (< n 3) (range 2 3)
-    :else (let [sqrt-n (Math/sqrt n)]
+    :else (let [sqrt-n (-> n Math/sqrt int)]
             (loop [known (range 2 4)
                    candidates (range 5 (inc n) 2)
                    p 3]
-              (if-not (< p sqrt-n)
+              (if (< sqrt-n p)
                 (concat known candidates)
                 (let [remaining (remove #(= 0 (rem % p)) candidates)
                       next-p (take 1 remaining)]
@@ -60,40 +62,9 @@
 
 (comment
   (sieve 30)
-  (time (str "mine: " (count (sieve 100000)) " primes"))
+  (time (str "mine: " (count (sieve 1000000)) " primes"))
   (with-progress-reporting (quick-bench (sieve 100000) :verbose)))
 
-
-; As a refinement, it is sufficient to mark the numbers in step 3 starting
-; from p2, as all the smaller multiples of p will have already been marked
-; at that point. 
-
-(defn sieve-refined-2 [n]
-  (cond
-    (< n 2) ()
-    (< n 3) (range 2 3)
-    :else (let [sqrt-n (Math/sqrt n)]
-            (loop [iteration 1
-                   known-primes (range 2 4)
-                   candidates (range 5 (inc n) 2)]
-              (let [next-eliminator (nth known-primes iteration)]
-                (if (> next-eliminator sqrt-n)
-                  (concat known-primes candidates)
-                  (let [squared-idx (.indexOf candidates (* next-eliminator next-eliminator))
-                        found-primes (take squared-idx candidates)
-                        remaining (->> (drop (inc squared-idx) candidates)
-                                       (map #(not-divisible-by % next-eliminator))
-                                       (remove nil?))
-                        primes (concat known-primes found-primes)]
-                    (recur
-                     (inc iteration)
-                     primes
-                     remaining))))))))
-
-(comment
-  (sieve-refined-2 50)
-  (time (str "mine: " (count (sieve-refined-2 100000)) " primes"))
-  (with-progress-reporting (bench (sieve-refined-2 100000) :verbose)))
 
 ;; Clojure lazy-seq function to generate n prime numbers. 
 ;; It generates .5 million prime numbers in 20 secs using
@@ -116,3 +87,119 @@
   (time (str "@abhilater's: " (count (primes-to-n 1000000)) " primes"))
   (with-progress-reporting (quick-bench (count (primes-to-n 100000)) :verbose)))
 
+
+; https://gist.github.com/ericnormand/b29ef113401ad2a6f656c4b701fb08a7#file-steve-miner-clj
+(defn classic-sieve
+  "Returns sequence of primes less than N"
+  [n]
+  (loop [nums (transient (vec (range n))) i 2]
+    (cond
+      (> (* i i) n) (remove nil? (nnext (persistent! nums)))
+      (nums i) (recur (loop [nums nums j (* i i)]
+                        (if (< j n)
+                          (recur (assoc! nums j nil) (+ j i))
+                          nums))
+                      (inc i))
+      :else (recur nums (inc i)))))
+
+
+; https://gist.github.com/ericnormand/b29ef113401ad2a6f656c4b701fb08a7#file-valentin-waeselynck-clj
+(defn primes-below
+  "Finds all prime numbers less than n, returns them sorted in a vector"
+  [n]
+  (if (< n 2)
+    []
+    (let [sieve (boolean-array n false)
+          s (-> n Math/sqrt Math/floor int)]
+      (loop [p 2]
+        (if (> p s)
+          (into []
+                (remove #(aget sieve %))
+                (range 2 n))
+          (do
+            (when-not (aget sieve p)
+              (loop [i (* 2 p)]
+                (when (< i n)
+                  (aset sieve i true)
+                  (recur (+ i p)))))
+            (recur (inc p))))))))
+
+; Teodor Heggelund, https://clojureverse.org/t/eratosthenes-party-time-a-k-a-feedback-wanted-on-this-implementation-of-eratosthenes-sieve/3801/7?u=pez
+(defn bitset-sieve [n]
+  (let [primes (java.util.BitSet. n)
+        imax (-> n Math/sqrt int inc)]
+    ;; Start by assuming they are all primes
+    (.set primes 2 n)
+    ;; Now, iterate through the primes.
+    (loop [i (.nextSetBit primes 0)]
+      ;; Imperative code ...
+      (if (or (> i imax)
+              (= i -1))
+        primes
+        (do
+          (doseq [j (range (+ i i) n i)]
+            ;; Not prime -- multiple of i!
+            (.clear primes j))
+          (recur (.nextSetBit primes (inc i))))))))
+
+(defn bitset-sieve-2 [n]
+  (let [primes (java.util.BitSet. n)
+        imax (-> n Math/sqrt int inc)]
+    ;; Start by assuming they are all primes
+    (.set primes 2 n)
+    ;; Now, iterate through the primes.
+    (loop [i (.nextSetBit primes 0)]
+      ;; Imperative code ...
+      (if (or (> i imax)
+              (= i -1))
+        (filter #(.get primes %)
+                (range 2 n))
+        (do
+          (doseq [j (range (* i i) n i)]
+            ;; Not prime -- multiple of i!
+            (.clear primes j))
+          (recur (.nextSetBit primes (inc i))))))))
+
+(defn bitset->vec [bs]
+  (->> (range (.size bs))
+       (filter (fn [x] (.get bs x)))
+       (into [])))
+
+
+(defn boolean-array-sieve [n]
+  ;; Start by assuming they are all primes
+  (let [primes (boolean-array n true)
+        imax (-> n Math/sqrt int inc)]
+    ;; Now, iterate through the primes.
+    (loop [i 2]
+      ;; Imperative code ...
+      (if (or (> i imax)
+              (= i -1))
+        (filter #(aget primes %)
+                (range 2 n))
+        (do
+          (doseq [j (range (* i i) n i)]
+            ;; Not prime -- multiple of i!
+            (aset primes j false))
+          (recur (inc i)))))))
+
+(comment
+  (def ba (boolean-array 30 false))
+  (aset ba 7 true)
+  (remove #(aget ba %)
+          (range 30))
+  (boolean-array-sieve 30)
+  (bitset-sieve-2 30)
+  (-> (bitset-sieve-2 30)
+      (.cardinality))
+  (time (str "boolean-array-sieve: " (boolean-array-sieve 1000000) " primes"))
+  (time (str "boolean-array-sieve: " (count (boolean-array-sieve 1000000)) " primes"))
+  (time (str "bitset-sieve: " (count (bitset-sieve-2 10000000)) " primes"))
+  (time (str "bitset-sieve: " (.cardinality (bitset-sieve-2 10000000)) " primes"))
+  (time (str "primes-below: " (count (primes-below 1000000)) " primes"))
+  (time (str "@pez's sieve: " (count (sieve 100000)) " primes"))
+  (with-progress-reporting (quick-bench (.cardinality (bitset-sieve-2 100000)) :verbose))
+  (with-progress-reporting (quick-bench (count (primes-below 100000)) :verbose))
+  (with-progress-reporting (quick-bench (count (boolean-array-sieve 100000)) :verbose))
+  (with-progress-reporting (quick-bench (boolean-array-sieve 100000) :verbose))
+  (with-progress-reporting (quick-bench (count (sieve 100000)) :verbose)))
