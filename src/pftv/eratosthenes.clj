@@ -183,18 +183,122 @@
             (aset primes j false))
           (recur (inc i)))))))
 
+(defn bs-sieve [^long n]
+  (let [primes (java.util.BitSet. n)
+        sqrt-n (long (Math/ceil (Math/sqrt n)))]
+    (loop [p 2]
+      (if-not (< p sqrt-n)
+        (remove #(.get primes %)
+                (range 2 (inc n)))
+        (do
+          (loop [i (* p p)]
+            (if (< i n)
+              (do
+                (.set primes i)
+                (recur (+ i p)))))
+          (recur (.nextClearBit primes (inc p))))))))
+
+
+(defn ba-sieve [^long n]
+  (let [primes (boolean-array (inc n) false)
+        sqrt-n (int (Math/ceil (Math/sqrt n)))]
+    (loop [p 2]
+      (if-not (< p sqrt-n)
+        (remove #(aget primes %)
+                (range 2 (inc n)))
+        (do
+          (when-not (aget primes p)
+            (loop [i (* p p)]
+              (if (<= i n)
+                (do
+                  (aset primes i true)
+                  (recur (+ i p))))))
+          (recur (inc p)))))))
+
+(defn ba-sieve-2 [^long n]
+  (let [hn (int (Math/ceil (/ n 2)))
+        max-p (int (Math/ceil (Math/sqrt n)))
+        sieved (boolean-array hn true)]
+    (loop [p 3]
+      (if-not (< p max-p)
+        (concat [2] (map #(inc (* % 2))
+                     (filter #(aget sieved %) 
+                             (range 1 hn))))
+        (let [sp (/ (dec p) 2)]
+          (when (aget sieved sp)
+            (loop [i (* p p)]
+              (if (< i n)
+                (do
+                  (aset sieved (/ (dec i) 2) false)
+                  (recur (+ i p))))))
+          (recur (inc (inc p))))))))
+
+
+
+(defn primes-below-2
+  "Finds all prime numbers less than n, returns them sorted in a vector"
+  [^long n]
+  (if (< n 2)
+    []
+    (let [sieve (boolean-array n true)
+          s (-> n Math/sqrt Math/floor int)]
+      (loop [p 2]
+        (if (> p s)
+          (filter #(aget sieve %)
+                 (range 3 n 2))
+          (do
+            (when (aget sieve p)
+              (loop [i (* p p)]
+                (when (< i n)
+                  (aset sieve i false)
+                  (recur (+ i p)))))
+            (recur (+ 1 p))))))))
+
+(defn sieve [^long n]
+  (let [primes (boolean-array (inc n) true)
+        sqrt-n (int (Math/ceil (Math/sqrt n)))]
+    (if (< n 2)
+      '()
+      (loop [p 3]
+        (if (< sqrt-n p)
+          (concat '(2)
+                  (filter #(aget primes %)
+                          (range 3 (inc n) 2)))
+          (do
+            (when (aget primes p)
+              (loop [i (* p p)]
+                (if (<= i n)
+                  (do
+                    (aset primes i false)
+                    (recur (+ i p))))))
+            (recur  (+ p 2))))))))
+
 (comment
+  (vec (ba-sieve-2 30))
+  (sieve 1)
+  (sieve 2)
+  (sieve 3)
+  (sieve 30)
+  (sieve 47)
+  (primes-below 1)
+  (primes-below 2)
+  (primes-below 3)
+  (primes-below-2 30)
+  (primes-below 47)
+  
   (def ba (boolean-array 30 false))
   (aset ba 7 true)
   (remove #(aget ba %)
           (range 30))
   (boolean-array-sieve 30)
+
+
   (bitset-sieve-2 30)
+  (bitset-sieve-2 47)
   (-> (bitset-sieve-2 30)
       (.cardinality))
   (time (str "boolean-array-sieve: " (boolean-array-sieve 1000000) " primes"))
   (time (str "boolean-array-sieve: " (count (boolean-array-sieve 1000000)) " primes"))
-  (time (str "bitset-sieve: " (count (bitset-sieve-2 10000000)) " primes"))
   (time (str "bitset-sieve: " (.cardinality (bitset-sieve-2 10000000)) " primes"))
   (time (str "primes-below: " (count (primes-below 1000000)) " primes"))
   (time (str "@pez's sieve: " (count (sieve 100000)) " primes"))
@@ -202,4 +306,30 @@
   (with-progress-reporting (quick-bench (count (primes-below 100000)) :verbose))
   (with-progress-reporting (quick-bench (count (boolean-array-sieve 100000)) :verbose))
   (with-progress-reporting (quick-bench (boolean-array-sieve 100000) :verbose))
-  (with-progress-reporting (quick-bench (count (sieve 100000)) :verbose)))
+  (with-progress-reporting (quick-bench (count (sieve 100000)) :verbose))
+  (with-progress-reporting (quick-bench (count (ba-sieve-2 100000)) :verbose))
+  (time (str "ba-sieve: " (count (ba-sieve 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (count (ba-sieve 100000)) :verbose))
+  (with-progress-reporting (quick-bench (ba-sieve-2 100000) :verbose))
+  (time (str "ba-sieve-2: " (count (ba-sieve-2 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (count (ba-sieve-2 100000)) :verbose))
+  (with-progress-reporting (quick-bench (sieve 1000000) :verbose))
+  (time (str "sieve: " (count (sieve 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (count (sieve 1000000)) :verbose))
+  (time (str "primes-below: " (count (primes-below 10000000)) " primes"))
+  (with-progress-reporting (quick-bench (count (primes-below 100000)) :verbose))
+  (time (str "primes-below-2: " (count (primes-below-2 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (count (primes-below-2 100000)) :verbose))
+
+  (ba-sieve 30)
+  (ba-sieve 47)
+  (bs-sieve 30)
+  (bs-sieve 47)
+  (boolean-array-sieve 47)
+  (time (str "ba-sieve: " (ba-sieve 1000000) " primes"))
+  (time (str "ba-sieve: " (count  e (ba-sieve 1000000)) " primes"))
+  (time (str "bs-sieve: " (count (bs-sieve 1000000)) " primes"))
+  (time (str "boolean-array-sieve: " (count (boolean-array-sieve 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (count (boolean-array-sieve 100000)) :verbose))
+  (with-progress-reporting (quick-bench (count (bs-sieve 100000)) :verbose))
+  (with-progress-reporting (quick-bench (count (ba-sieve 100000)) :verbose)))
