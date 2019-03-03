@@ -74,8 +74,8 @@
 
 (comment
   (sieve2 30)
-  (time (str "mine: " (count (sieve 1000000)) " primes"))
-  (with-progress-reporting (quick-bench (sieve 100000) :verbose)))
+  (time (str "sieve2: " (count (sieve2 1000000)) " primes"))
+  (with-progress-reporting (quick-bench (sieve2 100000) :verbose)))
 
 
 ;; Clojure lazy-seq function to generate n prime numbers. 
