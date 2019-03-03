@@ -46,7 +46,7 @@
 ; at that point. The algorithm is allowed to terminate in step 4 when p2
 ; is greater than n
 
-(defn sieve [n]
+(defn sieve1 [n]
   (cond
     (< n 2) ()
     (< n 3) (range 2 3)
@@ -60,8 +60,20 @@
                       next-p (take 1 remaining)]
                   (recur (concat known next-p) (drop 1 remaining) (first next-p))))))))
 
+(use 'clojure.set)
+
+(defn sieve2 [n]
+  (if (< n 2)
+    ()
+    (let [sqrt-n (Math/sqrt n)]
+      (loop [primes (set (range 3 (inc n) 2))
+             p 3]
+        (if-not (< p sqrt-n)
+          (concat '(2) (sort primes))
+          (recur (difference primes (set (range (* p p) n p))) (inc p)))))))
+
 (comment
-  (sieve 30)
+  (sieve2 30)
   (time (str "mine: " (count (sieve 1000000)) " primes"))
   (with-progress-reporting (quick-bench (sieve 100000) :verbose)))
 
@@ -270,24 +282,53 @@
                 (if (<= i n)
                   (do
                     (aset primes i false)
-                    (recur (+ i p))))))
+                    (recur (+ i p p))))))
             (recur  (+ p 2))))))))
 
+;; What if we use an int-array from 0 to n and set all primes to 0,
+;; then filter out the 0's by converting to a set?
+;; Answer: it goes much, much slower!
+(defn sieve-2 [^long n]
+  (let [primes (int-array (inc n) (->> (range 3 (inc n) 2)
+                                      (interpose 0)
+                                      (concat [0 1 2])))
+        sqrt-n (int (Math/ceil (Math/sqrt n)))]
+    (loop [p 3]
+      (if (< sqrt-n p)
+        (drop 2 (sort (set primes)))
+        (do
+          (when-not (= 0 (aget primes p))
+            (loop [i (* p p)]
+              (if (<= i n)
+                (do
+                  (aset primes i 0)
+                  (recur (+ i p p))))))
+          (recur (+ p 2)))))))
+
 (comment
+  (vec foo)
   (vec (ba-sieve-2 30))
+  (vec 
+   (int-array 10 (interpose 0 (range 1 10 2))))
   (sieve 1)
-  (sieve 2)
-  (sieve 3)
+  (sieve-2 2)
+  (sieve-2 7)
+  (sieve-2 11)
+  (sieve-2 30)
   (sieve 30)
-  (sieve 47)
+  (sieve-2 47)
+  (sieve   47)
+  (bs-sieve 10)
   (primes-below 1)
   (primes-below 2)
   (primes-below 3)
   (primes-below-2 30)
   (primes-below 47)
-  
+
   (def ba (boolean-array 30 false))
   (aset ba 7 true)
+  (nth (vec ba) 7)
+  (nth ba 7)
   (remove #(aget ba %)
           (range 30))
   (boolean-array-sieve 30)
@@ -301,7 +342,8 @@
   (time (str "boolean-array-sieve: " (count (boolean-array-sieve 1000000)) " primes"))
   (time (str "bitset-sieve: " (.cardinality (bitset-sieve-2 10000000)) " primes"))
   (time (str "primes-below: " (count (primes-below 1000000)) " primes"))
-  (time (str "@pez's sieve: " (count (sieve 100000)) " primes"))
+  (time (str "@pez's sieve: " (count (sieve 1000000)) " primes"))
+  (time (str "@pez's sieve-2: " (count (sieve-2 1000000)) " primes"))
   (with-progress-reporting (quick-bench (.cardinality (bitset-sieve-2 100000)) :verbose))
   (with-progress-reporting (quick-bench (count (primes-below 100000)) :verbose))
   (with-progress-reporting (quick-bench (count (boolean-array-sieve 100000)) :verbose))
@@ -333,3 +375,52 @@
   (with-progress-reporting (quick-bench (count (boolean-array-sieve 100000)) :verbose))
   (with-progress-reporting (quick-bench (count (bs-sieve 100000)) :verbose))
   (with-progress-reporting (quick-bench (count (ba-sieve 100000)) :verbose)))
+
+
+(comment
+  (def tests (clojure.edn/read-string (slurp "etc/eratosthenes-tests.edn")))
+
+  (with-open [w (clojure.java.io/writer "tests.edn")]
+    (binding [*print-length* nil]
+      (.write w "[")
+      (.write w (clojure.string/join "\n  " (map pr-str tests)))
+      (.write w "]"))))
+
+(defmacro time2 [expr]
+  `(let [t0# (System/nanoTime)
+         r# ~expr]
+     [(- (System/nanoTime) t0#) r#]))
+
+(def allowed-time
+  (* 30 1e9)) ;; 30 seconds in nanoseconds
+
+(defn run-test [f]
+  (let [run? (atom true)]
+    (doto (Thread.
+           (fn []
+             (loop [minutes 1]
+               (Thread/sleep 60000)
+               (when @run?
+                 (println minutes "minute")
+                 (recur (inc minutes))))))
+      .start)
+    (try
+      (println "Running basic tests.")
+      (doseq [[n ex] tests]
+        (let [[t ac] (time2 (f n))]
+          (assert (= ex ac) (format "Test failed for n=%d." n))
+          (assert (<= t allowed-time) (format "Went over allowed time for n=%d." n))))
+      (println "Passed tests. Running benchmark.")
+      (quick-bench (count (f 100000))) ;; make sure it's realized if it's lazy
+      (finally
+        (reset! run? false))))
+  :done)
+
+(comment
+  (run-test sieve)         ;   3.0 ms
+  (run-test primes-below)  ;   9.5 ms (if we remove the test for n=2, otherwise it fails)
+  (run-test ba-sieve)      ;   6.1 ms
+  (run-test primes-to-n)   ; 410.1 ms
+  (run-test sieve2)        ; 261.0 ms
+  (run-test sieve-2)       ;  45.0 ms
+  )
