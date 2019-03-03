@@ -70,7 +70,7 @@
              p 3]
         (if-not (< p sqrt-n)
           (concat '(2) (sort primes))
-          (recur (difference primes (set (range (* p p) n p))) (inc p)))))))
+          (recur (difference primes (set (range (* p p) n (+ p p)))) (+ p 2)))))))
 
 (comment
   (sieve2 30)
@@ -420,7 +420,8 @@
   (run-test sieve)         ;   3.0 ms
   (run-test primes-below)  ;   9.5 ms (if we remove the test for n=2, otherwise it fails)
   (run-test ba-sieve)      ;   6.1 ms
-  (run-test primes-to-n)   ; 410.1 ms
-  (run-test sieve2)        ; 261.0 ms
-  (run-test sieve-2)       ;  45.0 ms
+  (run-test primes-to-n)   ; 410   ms
+  (run-test sieve1)        ; 125   ms
+  (run-test sieve2)        ; 115   ms
+  (run-test sieve-2)       ;  41   ms
   )
