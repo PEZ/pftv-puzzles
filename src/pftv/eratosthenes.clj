@@ -72,34 +72,6 @@
           (concat '(2) (sort primes))
           (recur (difference primes (set (range (* p p) n (+ p p)))) (+ p 2)))))))
 
-; def reverse(self, x):
-;     rev = 0
-;     while x > 0:
-;         end = x%10
-;         rev = rev *10 + end
-;         x = x//10
-;     return rev  
-
-(defn mirror [x]
-  (loop [m 0
-         p x]
-        (if-not (> p 0)
-          m
-          (recur (+ (* m 10) (mod p 10)) (int (/ p 10))))))
-
-(defn palprimes [n]
-  (filter #(= % (mirror %)) (sieve n)))
-
-(comment
-  (int (/ 123 10))
-  (mod 123 10)
-  (mirror 12345)
-  (sieve 1000)
-  ((set [1 2 3]) 4)
-  (count (palprimes 1000))
-  (time (str "palprimes: " (count (palprimes 1000000)))))
-
-
 (comment
   (sieve2 30)
 
@@ -457,3 +429,22 @@
   (run-test sieve2)        ; 115   ms
   (run-test sieve-2))       ;  41   ms
   
+
+(defn mirror [x]
+  (loop [m 0
+         p x]
+    (if-not (> p 0)
+      m
+      (recur (+ (* m 10) (mod p 10)) (int (/ p 10))))))
+
+(defn palprimes [n]
+  (filter #(= % (mirror %)) (sieve n)))
+
+(comment
+  (int (/ 123 10))
+  (mod 123 10)
+  (mirror 12345)
+  (sieve 1000)
+  ((set [1 2 3]) 4)
+  (count (palprimes 1000))
+  (time (str "palprimes: " (count (palprimes 1000000)))))
