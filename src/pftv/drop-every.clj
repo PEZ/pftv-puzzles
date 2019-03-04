@@ -6,12 +6,11 @@
        (remove nil?)))
 
 (defn drop-every-td [nth coll]
-  (let [l (dec nth)]
-    (loop [selected '()
-           candidates coll]
-      (if (empty? candidates)
-        selected
-        (recur (concat selected (take l candidates)) (drop nth candidates))))))
+  (loop [selected '()
+         candidates coll]
+    (if (empty? candidates)
+      selected
+      (recur (concat selected (take (dec nth) candidates)) (drop nth candidates)))))
 
 
 
