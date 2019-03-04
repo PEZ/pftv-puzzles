@@ -1,10 +1,13 @@
 (ns drop-every)
 
+; https://purelyfunctional.tv/issues/purelyfunctional-tv-newsletter-316-avoid-licensing-and-support-issues-with-the-right-jdk-for-you/
+
 (defn drop-every [nth coll]
   (->> coll
        (map-indexed #(when (< 0 (rem (inc %1) nth)) %2))
        (remove nil?)))
 
+; Stack overflow! See: https://stuartsierra.com/2015/04/26/clojure-donts-concat
 (defn drop-every [nth coll]
   (loop [selected '()
          candidates coll]
@@ -22,12 +25,15 @@
 (defn drop-every [nth coll]
   (keep-indexed #(when (< 0 (rem (inc %1) nth)) %2) coll))
 
+
+; Daw-Ran Liou on Slack
 (defn drop-every [nth coll]
   (lazy-seq
    (when (not-empty coll)
      (concat (take (dec nth) coll)
              (drop-every nth (drop nth coll))))))
 
+; boris on Slack
 (defn drop-every
   ([n s] (drop-every 1 n s))
   ([counter n s]
@@ -44,16 +50,6 @@
 
 (comment
   (drop-every 3 [:a :b :c :d :e :f :g])
-  (drop-every-p 3 [:a :b :c :d :e :f :g])
-  (drop-every-td 3 [:a :b :c :d :e :f :g])
-  (drop-every-td 3 (range 10000))
   ;=> (:a :b :d :e :g)
   (time (count (drop-every 3 (range 1000000))))
-  (time (count (drop-every-keep 3 (range 1000000))))
-  (time (count (drop-every-p 3 (range 1000000))))
-  (time (count (take 10 (drop-every 3 (range 1000000)))))
-  (time (count (drop-every-td 3 (range 1000000))))
-  (time (count (take 10 (drop-every-td 3 (range 10000)))))
-
-  (take 2 [:a])
-  (drop 1 [:a :b :c]))
+  (time (count (take 10 (drop-every 3 (range 1000000))))))
