@@ -2,26 +2,14 @@
 
 (defn rle-first-try
   ([c]
-   (rle (lazy-seq) c))
+   (rle-first-try (lazy-seq) c))
   ([e c]
    (if (empty? c)
      e
      (let [p (first (take 1 c))
            e|c (partition-by #(not= p %) c)
            l (count (first (take 1 e|c)))]
-       (rle
-        (lazy-cat e [[l p]])
-        (drop l c))))))
-
-(defn rle
-  ([c]
-   (rle (lazy-seq) c))
-  ([e c]
-   (if (empty? c)
-     e
-     (let [p (first c)
-           l (or (first (keep-indexed #(when (not= %2 p) %1) c)) (count c))]
-       (rle
+       (rle-first-try
         (lazy-cat e [[l p]])
         (drop l c))))))
 
@@ -43,7 +31,7 @@
 
 
 (comment
-  (count (rle-first-try (range 1000)))
+  (count (rle (range 10000)))
   (= (rle [:a :a :a :b :c :d :d :d :d])
      '([3 :a] [1 :b] [1 :c] [4 :d]))
   (rld '([3 :a] [1 :b] [1 :c] [4 :d] [2 "foo"]))
