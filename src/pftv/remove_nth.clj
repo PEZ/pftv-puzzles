@@ -9,6 +9,10 @@
   ((if (vector? c) (comp vec (partial remove nil?)) (partial remove nil?))
    (map-indexed (fn [i item] (when (not= i n) item)) c)))
 
+(defn remove-at [n c]
+  (let [f (flatten [(repeat n identity) (fn [_] nil) (repeat (dec (count c)) identity)])]
+    (remove nil? (map (fn [item f] (f item)) c f))))
+
 (comment
   (remove-at 3 [1 2 3 4 5 6])  ; => [1 2 3 5 6]
   (remove-at 3 '(1 2 3 4 5 6)) ; => (1 2 3 5 6)
