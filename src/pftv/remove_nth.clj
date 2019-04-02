@@ -10,7 +10,7 @@
    (map-indexed (fn [i item] (when (not= i n) item)) c)))
 
 (defn remove-at [n c]
-  (let [f (flatten [(repeat n identity) (fn [_] nil) (repeat (dec (count c)) identity)])]
+  (let [f (lazy-cat (repeat n identity) [(fn [_] nil)] (repeat (dec (count c)) identity))]
     (remove nil? (map (fn [item f] (f item)) c f))))
 
 (comment
