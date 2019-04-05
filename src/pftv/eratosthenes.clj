@@ -398,27 +398,28 @@
 (def allowed-time
   (* 30 1e9)) ;; 30 seconds in nanoseconds
 
-(defn run-test [f]
-  (let [run? (atom true)]
-    (doto (Thread.
-           (fn []
-             (loop [minutes 1]
-               (Thread/sleep 60000)
-               (when @run?
-                 (println minutes "minute")
-                 (recur (inc minutes))))))
-      .start)
-    (try
-      (println "Running basic tests.")
-      (doseq [[n ex] tests]
-        (let [[t ac] (time2 (f n))]
-          (assert (= ex ac) (format "Test failed for n=%d." n))
-          (assert (<= t allowed-time) (format "Went over allowed time for n=%d." n))))
-      (println "Passed tests. Running benchmark.")
-      (quick-bench (count (f 100000))) ;; make sure it's realized if it's lazy
-      (finally
-        (reset! run? false))))
-  :done)
+(comment
+ (defn run-test [f]
+   (let [run? (atom true)]
+     (doto (Thread.
+            (fn []
+              (loop [minutes 1]
+                (Thread/sleep 60000)
+                (when @run?
+                  (println minutes "minute")
+                  (recur (inc minutes))))))
+       .start)
+     (try
+       (println "Running basic tests.")
+       (doseq [[n ex] tests]
+         (let [[t ac] (time2 (f n))]
+           (assert (= ex ac) (format "Test failed for n=%d." n))
+           (assert (<= t allowed-time) (format "Went over allowed time for n=%d." n))))
+       (println "Passed tests. Running benchmark.")
+       (quick-bench (count (f 100000))) ;; make sure it's realized if it's lazy
+       (finally
+         (reset! run? false))))
+   :done))
 
 (comment
   (run-test sieve)         ;   3.0 ms
