@@ -29,7 +29,8 @@
 
 (defn wheres-waldo-bonus
   "Find the path to waldo"
-  {:test (fn []
+  {:arglists '([waldo vektor])
+   :test (fn []
            (is (= [7 1 0]
                   (wheres-waldo-bonus :W
                                       [[:A :B :C]
