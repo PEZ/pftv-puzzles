@@ -39,10 +39,6 @@
 
 (defn wheres-waldo-bonus
   "Find the path to waldo"
-  [waldo vektor]
-  (wheres-waldo-helper waldo vektor []))
-
-(comment
   {:test (fn []
            (is (= [7 1 0]
                   (wheres-waldo-bonus :W
@@ -64,4 +60,6 @@
                   (wheres-waldo-bonus [:i :am :waldo]
                                       [[:a :b "ceee"]
                                        [[:i :am :not :waldo] [:i :am :spartacus] [:hello [:i :am :waldo] [:who :are :you?]]]
-                                       ["d" "e" 6]]))))})
+                                       ["d" "e" 6]]))))}
+  [waldo vektor]
+  (wheres-waldo-helper waldo vektor []))
