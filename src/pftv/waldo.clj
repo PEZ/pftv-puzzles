@@ -27,10 +27,23 @@
        first)
   )
 
+(defn- wheres-waldo-helper
+  [waldo vektor path]
+  (when (vector? vektor)
+    (let [i (.indexOf vektor waldo)]
+      (if (> i -1)
+        (conj path i)
+        (->> (map #(wheres-waldo-helper waldo %1 (conj path %2)) vektor (range))
+             (remove nil?)
+             first)))))
+
 (defn wheres-waldo-bonus
   "Find the path to waldo"
-  {:arglists '([waldo vektor])
-   :test (fn []
+  [waldo vektor]
+  (wheres-waldo-helper waldo vektor []))
+
+(comment
+  {:test (fn []
            (is (= [7 1 0]
                   (wheres-waldo-bonus :W
                                       [[:A :B :C]
@@ -51,14 +64,4 @@
                   (wheres-waldo-bonus [:i :am :waldo]
                                       [[:a :b "ceee"]
                                        [[:i :am :not :waldo] [:i :am :spartacus] [:hello [:i :am :waldo] [:who :are :you?]]]
-                                       ["d" "e" 6]]))))}
-  ([waldo vektor]
-   (wheres-waldo-bonus waldo vektor []))
-  ([waldo vektor path]
-   (when (vector? vektor)
-     (let [i (.indexOf vektor waldo)]
-       (if (> i -1)
-         (conj path i)
-         (->> (map #(wheres-waldo-bonus waldo %1 (conj path %2)) vektor (range))
-              (remove nil?)
-              first))))))
+                                       ["d" "e" 6]]))))})
