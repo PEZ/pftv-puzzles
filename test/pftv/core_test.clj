@@ -1,7 +1,7 @@
 (ns pftv.core-test
-  (:require [clojure.test :refer :all]
-            [pftv.core :refer :all]))
+  (:require [clojure.test :refer [deftest is testing]]
+            [pftv.core :as sut]))
 
 (deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+  (testing "Silly stub"
+    (is (= "nothing to see here" sut/foo))))
