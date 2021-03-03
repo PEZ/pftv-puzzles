@@ -5,5 +5,6 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [criterium "0.4.4"]
-                 [org.clojure/core.async "0.4.500"]]
+                 [org.clojure/core.async "0.4.500"]
+                 [com.taoensso/tufte "2.2.0"]]
   :repl-options {:init-ns pftv.core})

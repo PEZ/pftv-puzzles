@@ -1,0 +1,818 @@
+; This is the Calva evaluation results output window.
+; TIPS: The keyboard shortcut `ctrl+alt+c o` shows and focuses this window
+;   when connected to a REPL session.
+; Please see https://calva.io/output/ for more info.
+; Happy coding! ♥️
+
+; Jacking in...
+; nREPL Connection was closed
+; Starting Jack-in Terminal: lein update-in :dependencies conj '[nrepl,"0.8.3"]' -- update-in :plugins conj '[cider/cider-nrepl,"0.25.8"]' -- update-in '[:repl-options,:nrepl-middleware]' conj '["cider.nrepl/cider-middleware"]' -- repl :headless
+; Hooking up nREPL sessions...
+; Connected session: clj
+; TIPS: 
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+clj꞉pftv.core꞉> 
+; Jack-in done.
+clj꞉pftv.core꞉> 
+; Evaluating file: eratosthenes.clj
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/n
+clj꞉eratosthenes꞉> 
+#'eratosthenes/ba
+clj꞉eratosthenes꞉> 
+#'eratosthenes/prob
+clj꞉eratosthenes꞉> 
+#'eratosthenes/sample-size
+clj꞉eratosthenes꞉> 
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/every-other
+clj꞉eratosthenes꞉> 
+"Elapsed time: 7408.502518 msecs"
+37635
+clj꞉eratosthenes꞉> 
+500000
+clj꞉eratosthenes꞉> 
+37635
+clj꞉eratosthenes꞉> 
+#'eratosthenes/ba
+clj꞉eratosthenes꞉> 
+0
+clj꞉eratosthenes꞉> 
+#'eratosthenes/n
+clj꞉eratosthenes꞉> 
+#'eratosthenes/ba
+clj꞉eratosthenes꞉> 
+#'eratosthenes/prob
+clj꞉eratosthenes꞉> 
+; Syntax error (IllegalArgumentException) compiling . at (eratosthenes.clj:562:25).
+; Unable to resolve classname: clojure.core$long@160d6536
+clj꞉eratosthenes꞉> 
+; Syntax error (IllegalArgumentException) compiling . at (eratosthenes.clj:562:26).
+; Unable to resolve classname: clojure.core$long@160d6536
+clj꞉eratosthenes꞉> 
+#'eratosthenes/n
+clj꞉eratosthenes꞉> 
+#'eratosthenes/ba
+clj꞉eratosthenes꞉> 
+0
+clj꞉eratosthenes꞉> 
+500000
+clj꞉eratosthenes꞉> 
+filter
+"Elapsed time: 23.096931 msecs"
+"Elapsed time: 23.407488 msecs"
+transduce
+"Elapsed time: 23.478325 msecs"
+reducers/filter
+"Elapsed time: 22.52509 msecs"
+37527
+clj꞉eratosthenes꞉> 
+filter
+"Elapsed time: 21.64507 msecs"
+transduce
+"Elapsed time: 19.046552 msecs"
+reducers/filter
+"Elapsed time: 20.469524 msecs"
+37408
+clj꞉eratosthenes꞉> 
+filter
+"Elapsed time: 24.979066 msecs"
+transduce
+"Elapsed time: 22.342582 msecs"
+reducers/filter
+"Elapsed time: 23.096369 msecs"
+75151
+clj꞉eratosthenes꞉> 
+filter
+"Elapsed time: 25.155124 msecs"
+transduce
+"Elapsed time: 22.057501 msecs"
+reducers/filter
+"Elapsed time: 20.579873 msecs"
+75083
+clj꞉eratosthenes꞉> 
+filter
+"Elapsed time: 24.749644 msecs"
+transduce
+"Elapsed time: 24.192042 msecs"
+core.reducers/filter
+"Elapsed time: 25.058881 msecs"
+core.async/pipeline
+"Elapsed time: 3433.658041 msecs"
+
+clj꞉eratosthenes꞉> 
+filter
+"Elapsed time: 24.779003 msecs"
+transduce
+"Elapsed time: 23.854725 msecs"
+core.reducers/filter
+"Elapsed time: 23.759016 msecs"
+core.async/pipeline
+"Elapsed time: 3535.955765 msecs"
+74885
+clj꞉eratosthenes꞉> 
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 23,654346 ms
+    Execution time std-deviation : 301,776435 µs
+   Execution time lower quantile : 23,352585 ms ( 2,5%)
+   Execution time upper quantile : 24,050820 ms (97,5%)
+                   Overhead used : 14,507923 ns
+transduce
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 20,129352 ms
+    Execution time std-deviation : 595,084459 µs
+   Execution time lower quantile : 19,646010 ms ( 2,5%)
+   Execution time upper quantile : 21,079716 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 17,903643 ms
+    Execution time std-deviation : 186,971423 µs
+   Execution time lower quantile : 17,675913 ms ( 2,5%)
+   Execution time upper quantile : 18,138291 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.async/pipeline
+Evaluation count : 22230 in 6 samples of 3705 calls.
+             Execution time mean : 27,089463 µs
+    Execution time std-deviation : 136,898899 ns
+   Execution time lower quantile : 26,919838 µs ( 2,5%)
+   Execution time upper quantile : 27,291471 µs (97,5%)
+                   Overhead used : 14,507923 ns
+clj꞉eratosthenes꞉> 
+#'eratosthenes/tests
+clj꞉eratosthenes꞉> 
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/time2
+clj꞉eratosthenes꞉> 
+#'eratosthenes/run-test
+clj꞉eratosthenes꞉> 
+#'eratosthenes/allowed-time
+clj꞉eratosthenes꞉> 
+#'eratosthenes/run-test
+clj꞉eratosthenes꞉> 
+; Syntax error compiling at (eratosthenes.clj:580:5).
+; Unable to resolve symbol: run-tests in this context
+clj꞉eratosthenes꞉> 
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 23,891509 ms
+    Execution time std-deviation : 616,845146 µs
+   Execution time lower quantile : 23,401841 ms ( 2,5%)
+   Execution time upper quantile : 24,932511 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+transduce
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 20,019502 ms
+    Execution time std-deviation : 163,191603 µs
+   Execution time lower quantile : 19,864383 ms ( 2,5%)
+   Execution time upper quantile : 20,207587 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 16,886381 ms
+    Execution time std-deviation : 87,206501 µs
+   Execution time lower quantile : 16,780210 ms ( 2,5%)
+   Execution time upper quantile : 16,974388 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.async/pipeline
+Evaluation count : 22086 in 6 samples of 3681 calls.
+             Execution time mean : 28,470260 µs
+    Execution time std-deviation : 2,154367 µs
+   Execution time lower quantile : 27,054722 µs ( 2,5%)
+   Execution time upper quantile : 32,164033 µs (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 15,4034 % Variance is moderately inflated by outliers
+nil
+clj꞉eratosthenes꞉> 
+
+clj꞉eratosthenes꞉> 
+
+clj꞉eratosthenes꞉> 
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 23,190833 ms
+    Execution time std-deviation : 995,929730 µs
+   Execution time lower quantile : 22,416031 ms ( 2,5%)
+   Execution time upper quantile : 24,364141 ms (97,5%)
+                   Overhead used : 14,507923 ns
+transduce
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 19,993317 ms
+    Execution time std-deviation : 682,631453 µs
+   Execution time lower quantile : 19,264084 ms ( 2,5%)
+   Execution time upper quantile : 20,722650 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 16,558829 ms
+    Execution time std-deviation : 565,275543 µs
+   Execution time lower quantile : 16,059563 ms ( 2,5%)
+   Execution time upper quantile : 17,201661 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.async/pipeline
+Evaluation count : 23298 in 6 samples of 3883 calls.
+             Execution time mean : 25,639154 µs
+    Execution time std-deviation : 277,254851 ns
+   Execution time lower quantile : 25,341335 µs ( 2,5%)
+   Execution time upper quantile : 26,092007 µs (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 2 outliers in 6 samples (33,3333 %)
+	low-severe	 1 (16,6667 %)
+	low-mild	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+nil
+clj꞉eratosthenes꞉> 
+
+clj꞉eratosthenes꞉> 
+filter
+; Evaluation was interrupted
+clj꞉eratosthenes꞉> 
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 22,500465 ms
+    Execution time std-deviation : 353,780225 µs
+   Execution time lower quantile : 21,864595 ms ( 2,5%)
+   Execution time upper quantile : 22,861118 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+transduce
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,434672 ms
+    Execution time std-deviation : 331,954572 µs
+   Execution time lower quantile : 19,115717 ms ( 2,5%)
+   Execution time upper quantile : 19,885245 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 16,372552 ms
+    Execution time std-deviation : 367,186693 µs
+   Execution time lower quantile : 16,044643 ms ( 2,5%)
+   Execution time upper quantile : 16,791375 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.async/pipeline
+Evaluation count : 23724 in 6 samples of 3954 calls.
+             Execution time mean : 24,985350 µs
+    Execution time std-deviation : 227,115722 ns
+   Execution time lower quantile : 24,801057 µs ( 2,5%)
+   Execution time upper quantile : 25,354725 µs (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+for
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,456574 ms
+    Execution time std-deviation : 100,364503 µs
+   Execution time lower quantile : 19,370228 ms ( 2,5%)
+   Execution time upper quantile : 19,618312 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-bs-sieve-2
+clj꞉eratosthenes꞉> 
+(2 3 5 7)
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-bs-sieve
+clj꞉eratosthenes꞉> 
+(2 3 5 7)
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 288 in 6 samples of 48 calls.
+             Execution time mean : 2,111481 ms
+    Execution time std-deviation : 48,182874 µs
+   Execution time lower quantile : 2,074597 ms ( 2,5%)
+   Execution time upper quantile : 2,187801 ms (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-loop-sieve
+clj꞉eratosthenes꞉> 
+[0 1 2 3 4 5 6 7 8 10 11 12 13 14 16 17 18 19 20 22 23 24 26 28 29 30 31 32 34 36 37 38 40 41 42 43 44 46 47 48]
+clj꞉eratosthenes꞉> 
+Evaluation count : 24 in 6 samples of 4 calls.
+             Execution time mean : 39,846238 ms
+    Execution time std-deviation : 6,260265 ms
+   Execution time lower quantile : 32,508476 ms ( 2,5%)
+   Execution time upper quantile : 46,305755 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-loop-sieve
+clj꞉eratosthenes꞉> 
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47)
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-loop-sieve
+clj꞉eratosthenes꞉> 
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97)
+clj꞉eratosthenes꞉> 
+Running basic tests.
+; Execution error (AssertionError) at eratosthenes/run-test$fn (form-init9386710272554454210.clj:861).
+; Assert failed: Test failed for n=7.
+(= ex ac)
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-loop-sieve
+clj꞉eratosthenes꞉> 
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97)
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 510 in 6 samples of 85 calls.
+             Execution time mean : 1,200894 ms
+    Execution time std-deviation : 30,620125 µs
+   Execution time lower quantile : 1,162468 ms ( 2,5%)
+   Execution time upper quantile : 1,233407 ms (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+Evaluation count : 48 in 6 samples of 8 calls.
+             Execution time mean : 14,358414 ms
+    Execution time std-deviation : 1,403233 ms
+   Execution time lower quantile : 13,393781 ms ( 2,5%)
+   Execution time upper quantile : 16,706928 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 30,3038 % Variance is moderately inflated by outliers
+nil
+clj꞉eratosthenes꞉> 
+; Syntax error compiling at (eratosthenes.clj:661:34).
+; Unable to resolve symbol: primes in this context
+clj꞉eratosthenes꞉> 
+(println "loop")
+(quick-bench #_time
+             (count
+              (loop [res []
+                     i 1]
+                (if (<= i n)
+                  (recur (if (aget ba i)
+                           (conj res i)
+                           res)
+                         (+ i 2))
+                  res))))
+
+loop
+Evaluation count : 84 in 6 samples of 14 calls.
+             Execution time mean : 7,518441 ms
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 23,020098 ms
+transduce
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,090405 ms
+core.reducers/filter
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 16,328693 ms
+for
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,678977 ms
+nil
+clj꞉eratosthenes꞉> 
+loop
+Evaluation count : 72 in 6 samples of 12 calls.
+             Execution time mean : 7,972138 ms
+    Execution time std-deviation : 563,387564 µs
+   Execution time lower quantile : 7,520896 ms ( 2,5%)
+   Execution time upper quantile : 8,753055 ms (97,5%)
+                   Overhead used : 14,507923 ns
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 24,382507 ms
+    Execution time std-deviation : 961,358151 µs
+   Execution time lower quantile : 23,370561 ms ( 2,5%)
+   Execution time upper quantile : 25,939113 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+transduce
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,458645 ms
+    Execution time std-deviation : 612,258391 µs
+   Execution time lower quantile : 18,723865 ms ( 2,5%)
+   Execution time upper quantile : 20,057755 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 16,331802 ms
+    Execution time std-deviation : 392,618120 µs
+   Execution time lower quantile : 16,093628 ms ( 2,5%)
+   Execution time upper quantile : 17,010534 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+core.async/pipeline
+Evaluation count : 23544 in 6 samples of 3924 calls.
+             Execution time mean : 25,817209 µs
+    Execution time std-deviation : 533,960914 ns
+   Execution time lower quantile : 25,270961 µs ( 2,5%)
+   Execution time upper quantile : 26,490402 µs (97,5%)
+                   Overhead used : 14,507923 ns
+for
+; Evaluating file: eratosthenes.clj
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 20,298400 ms
+    Execution time std-deviation : 651,752510 µs
+   Execution time lower quantile : 19,874800 ms ( 2,5%)
+   Execution time upper quantile : 21,380808 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+nil
+clj꞉eratosthenes꞉> 
+nil
+clj꞉eratosthenes꞉> 
+; Evaluating file: eratosthenes.clj
+nil
+clj꞉eratosthenes꞉> 
+loop
+Evaluation count : 84 in 6 samples of 14 calls.
+             Execution time mean : 7,528015 ms
+    Execution time std-deviation : 238,202736 µs
+   Execution time lower quantile : 7,293897 ms ( 2,5%)
+   Execution time upper quantile : 7,815178 ms (97,5%)
+                   Overhead used : 14,507923 ns
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 22,425738 ms
+    Execution time std-deviation : 213,013575 µs
+   Execution time lower quantile : 22,199325 ms ( 2,5%)
+   Execution time upper quantile : 22,706665 ms (97,5%)
+                   Overhead used : 14,507923 ns
+transduce
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,212823 ms
+    Execution time std-deviation : 127,796252 µs
+   Execution time lower quantile : 19,044241 ms ( 2,5%)
+   Execution time upper quantile : 19,358068 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 16,045688 ms
+    Execution time std-deviation : 288,819270 µs
+   Execution time lower quantile : 15,662434 ms ( 2,5%)
+   Execution time upper quantile : 16,372707 ms (97,5%)
+                   Overhead used : 14,507923 ns
+for
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,689132 ms
+    Execution time std-deviation : 370,371154 µs
+   Execution time lower quantile : 19,246892 ms ( 2,5%)
+   Execution time upper quantile : 20,097307 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 504 in 6 samples of 84 calls.
+             Execution time mean : 1,180952 ms
+    Execution time std-deviation : 14,013120 µs
+   Execution time lower quantile : 1,167540 ms ( 2,5%)
+   Execution time upper quantile : 1,196022 ms (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+Evaluation count : 48 in 6 samples of 8 calls.
+             Execution time mean : 13,672076 ms
+    Execution time std-deviation : 281,585518 µs
+   Execution time lower quantile : 13,436032 ms ( 2,5%)
+   Execution time upper quantile : 13,994729 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-loop-transient-sieve
+clj꞉eratosthenes꞉> 
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97)
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 690 in 6 samples of 115 calls.
+             Execution time mean : 887,307357 µs
+    Execution time std-deviation : 8,214022 µs
+   Execution time lower quantile : 879,186174 µs ( 2,5%)
+   Execution time upper quantile : 896,512392 µs (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+Evaluation count : 60 in 6 samples of 10 calls.
+             Execution time mean : 10,599681 ms
+    Execution time std-deviation : 163,784470 µs
+   Execution time lower quantile : 10,417649 ms ( 2,5%)
+   Execution time upper quantile : 10,831060 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+nil
+clj꞉eratosthenes꞉> 
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 22,774948 ms
+    Execution time std-deviation : 554,120058 µs
+   Execution time lower quantile : 22,279395 ms ( 2,5%)
+   Execution time upper quantile : 23,635084 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-sieve
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 216 in 6 samples of 36 calls.
+             Execution time mean : 2,842635 ms
+    Execution time std-deviation : 16,650204 µs
+   Execution time lower quantile : 2,827448 ms ( 2,5%)
+   Execution time upper quantile : 2,858386 ms (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+Evaluation count : 24 in 6 samples of 4 calls.
+             Execution time mean : 25,913184 ms
+    Execution time std-deviation : 569,484180 µs
+   Execution time lower quantile : 25,135620 ms ( 2,5%)
+   Execution time upper quantile : 26,538920 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+loop
+             Execution time mean : 7,704050 ms
+loop-transient
+             Execution time mean : 5,017702 ms
+filter
+             Execution time mean : 24,047486 ms
+transduce
+             Execution time mean : 19,687393 ms
+core.reducers/filter
+             Execution time mean : 17,303117 ms
+for
+             Execution time mean : 21,142251 ms
+nil
+clj꞉eratosthenes꞉> 
+; Evaluating file: eratosthenes.clj
+nil
+clj꞉eratosthenes꞉> 
+loop
+Evaluation count : 84 in 6 samples of 14 calls.
+             Execution time mean : 7,666416 ms
+    Execution time std-deviation : 233,686049 µs
+   Execution time lower quantile : 7,475952 ms ( 2,5%)
+   Execution time upper quantile : 8,060176 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 2 outliers in 6 samples (33,3333 %)
+	low-severe	 1 (16,6667 %)
+	low-mild	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+loop-transient
+Evaluation count : 126 in 6 samples of 21 calls.
+             Execution time mean : 5,082826 ms
+    Execution time std-deviation : 100,509055 µs
+   Execution time lower quantile : 5,009021 ms ( 2,5%)
+   Execution time upper quantile : 5,199057 ms (97,5%)
+                   Overhead used : 14,507923 ns
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 23,450077 ms
+    Execution time std-deviation : 93,346529 µs
+   Execution time lower quantile : 23,351882 ms ( 2,5%)
+   Execution time upper quantile : 23,578579 ms (97,5%)
+                   Overhead used : 14,507923 ns
+transduce
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,712700 ms
+    Execution time std-deviation : 197,983933 µs
+   Execution time lower quantile : 19,439958 ms ( 2,5%)
+   Execution time upper quantile : 19,924085 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 17,765381 ms
+    Execution time std-deviation : 924,523933 µs
+   Execution time lower quantile : 16,962103 ms ( 2,5%)
+   Execution time upper quantile : 19,255551 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,9956 % Variance is moderately inflated by outliers
+core.async/pipeline
+Evaluation count : 23262 in 6 samples of 3877 calls.
+             Execution time mean : 27,678608 µs
+    Execution time std-deviation : 2,222376 µs
+   Execution time lower quantile : 25,877257 µs ( 2,5%)
+   Execution time upper quantile : 30,797588 µs (97,5%)
+                   Overhead used : 14,507923 ns
+for
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 20,879989 ms
+    Execution time std-deviation : 862,647371 µs
+   Execution time lower quantile : 20,286480 ms ( 2,5%)
+   Execution time upper quantile : 21,954127 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+loop
+Evaluation count : 96 in 6 samples of 16 calls.
+             Execution time mean : 6,439515 ms
+    Execution time std-deviation : 417,570270 µs
+   Execution time lower quantile : 6,190043 ms ( 2,5%)
+   Execution time upper quantile : 7,155677 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 14,9463 % Variance is moderately inflated by outliers
+loop-transient
+Evaluation count : 168 in 6 samples of 28 calls.
+             Execution time mean : 3,630747 ms
+    Execution time std-deviation : 28,722288 µs
+   Execution time lower quantile : 3,601858 ms ( 2,5%)
+   Execution time upper quantile : 3,678080 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 2 outliers in 6 samples (33,3333 %)
+	low-severe	 1 (16,6667 %)
+	low-mild	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+filter
+Evaluation count : 30 in 6 samples of 5 calls.
+             Execution time mean : 20,248532 ms
+    Execution time std-deviation : 228,934953 µs
+   Execution time lower quantile : 19,991386 ms ( 2,5%)
+   Execution time upper quantile : 20,538961 ms (97,5%)
+                   Overhead used : 14,507923 ns
+transduce
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 16,563659 ms
+    Execution time std-deviation : 499,402779 µs
+   Execution time lower quantile : 16,097351 ms ( 2,5%)
+   Execution time upper quantile : 17,151546 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 48 in 6 samples of 8 calls.
+             Execution time mean : 13,555651 ms
+    Execution time std-deviation : 297,444349 µs
+   Execution time lower quantile : 13,325582 ms ( 2,5%)
+   Execution time upper quantile : 13,929566 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.async/pipeline
+Evaluation count : 23784 in 6 samples of 3964 calls.
+             Execution time mean : 25,400047 µs
+    Execution time std-deviation : 854,263933 ns
+   Execution time lower quantile : 24,967654 µs ( 2,5%)
+   Execution time upper quantile : 26,872787 µs (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+for
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 15,027683 ms
+    Execution time std-deviation : 259,190754 µs
+   Execution time lower quantile : 14,713734 ms ( 2,5%)
+   Execution time upper quantile : 15,394555 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+loop
+Evaluation count : 102 in 6 samples of 17 calls.
+             Execution time mean : 6,566041 ms
+    Execution time std-deviation : 817,891980 µs
+   Execution time lower quantile : 5,916582 ms ( 2,5%)
+   Execution time upper quantile : 7,777895 ms (97,5%)
+                   Overhead used : 14,507923 ns
+loop-transient
+Evaluation count : 168 in 6 samples of 28 calls.
+             Execution time mean : 3,534672 ms
+    Execution time std-deviation : 37,605796 µs
+   Execution time lower quantile : 3,493019 ms ( 2,5%)
+   Execution time upper quantile : 3,579433 ms (97,5%)
+                   Overhead used : 14,507923 ns
+loop-transient-unchecked
+Evaluation count : 180 in 6 samples of 30 calls.
+             Execution time mean : 3,415048 ms
+    Execution time std-deviation : 58,956435 µs
+   Execution time lower quantile : 3,368496 ms ( 2,5%)
+   Execution time upper quantile : 3,509278 ms (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 13,8889 % Variance is moderately inflated by outliers
+filter
+Evaluation count : 36 in 6 samples of 6 calls.
+             Execution time mean : 19,285990 ms
+    Execution time std-deviation : 319,455459 µs
+   Execution time lower quantile : 18,949733 ms ( 2,5%)
+   Execution time upper quantile : 19,614103 ms (97,5%)
+                   Overhead used : 14,507923 ns
+transduce
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 15,842656 ms
+    Execution time std-deviation : 489,608659 µs
+   Execution time lower quantile : 15,236720 ms ( 2,5%)
+   Execution time upper quantile : 16,377884 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.reducers/filter
+Evaluation count : 48 in 6 samples of 8 calls.
+             Execution time mean : 12,713158 ms
+    Execution time std-deviation : 244,177361 µs
+   Execution time lower quantile : 12,427377 ms ( 2,5%)
+   Execution time upper quantile : 12,970363 ms (97,5%)
+                   Overhead used : 14,507923 ns
+core.async/pipeline
+Evaluation count : 23412 in 6 samples of 3902 calls.
+             Execution time mean : 29,231207 µs
+    Execution time std-deviation : 7,772204 µs
+   Execution time lower quantile : 25,471886 µs ( 2,5%)
+   Execution time upper quantile : 42,617183 µs (97,5%)
+                   Overhead used : 14,507923 ns
+
+Found 1 outliers in 6 samples (16,6667 %)
+	low-severe	 1 (16,6667 %)
+ Variance from outliers : 65,0295 % Variance is severely inflated by outliers
+for
+Evaluation count : 42 in 6 samples of 7 calls.
+             Execution time mean : 15,441075 ms
+    Execution time std-deviation : 504,116674 µs
+   Execution time lower quantile : 15,081831 ms ( 2,5%)
+   Execution time upper quantile : 16,137645 ms (97,5%)
+                   Overhead used : 14,507923 ns
+nil
+clj꞉eratosthenes꞉> 
+#'eratosthenes/pez-ba-loop-transient-sieve
+clj꞉eratosthenes꞉> 
+(run-test pez-ba-loop-transient-sieve)
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 1092 in 6 samples of 182 calls.
+             Execution time mean : 567,930460 µs
+    Execution time std-deviation : 19,620040 µs
+   Execution time lower quantile : 543,649313 µs ( 2,5%)
+   Execution time upper quantile : 588,540940 µs (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+#'eratosthenes/sieve2
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 6 in 6 samples of 1 calls.
+             Execution time mean : 99,758575 ms
+    Execution time std-deviation : 6,694814 ms
+   Execution time lower quantile : 92,976633 ms ( 2,5%)
+   Execution time upper quantile : 109,266042 ms (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
+#'eratosthenes/bs-sieve
+clj꞉eratosthenes꞉> 
+Running basic tests.
+; Execution error (AssertionError) at eratosthenes/run-test$fn (form-init9386710272554454210.clj:861).
+; Assert failed: Test failed for n=10.
+(= ex ac)
+clj꞉eratosthenes꞉> 
+#'eratosthenes/ba-sieve
+clj꞉eratosthenes꞉> 
+Running basic tests.
+Passed tests. Running benchmark.
+Evaluation count : 132 in 6 samples of 22 calls.
+             Execution time mean : 4,632318 ms
+    Execution time std-deviation : 140,545100 µs
+   Execution time lower quantile : 4,509642 ms ( 2,5%)
+   Execution time upper quantile : 4,829576 ms (97,5%)
+                   Overhead used : 14,507923 ns
+:done
+clj꞉eratosthenes꞉> 
